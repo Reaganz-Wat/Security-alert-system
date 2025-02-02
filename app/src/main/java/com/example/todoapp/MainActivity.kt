@@ -57,8 +57,9 @@ fun AppNavigation() {
         composable("sosMessaging") {SOSMessagingScreen(navController)}
         composable("profile") {ProfileScreen(navController)}
         composable("contacts") {ContactsScreen(navController)}
-        composable("activities") {ActivitiesScreen()}
+        composable("activities") {ActivitiesScreen(navController)}
         composable("settings") {SettingsScreen(navController)}
+        composable("logsDetails") { LogsDetails(navController) }
     }
 }
 

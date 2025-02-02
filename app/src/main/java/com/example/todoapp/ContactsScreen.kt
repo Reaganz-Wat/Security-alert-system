@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -80,9 +81,17 @@ fun ContactsScreen(navHostController: NavHostController) {
                     }
                 },
                 actions = {
+                    Row{
+                        IconButton(onClick = {}) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                        }
                     IconButton(onClick = { expanded = !expanded }) {
-                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Add Contacts")
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "Add Contacts"
+                        )
                     }
+                }
                     DropdownMenu(expanded = expanded, onDismissRequest = {expanded = false}) {
                         DropdownMenuItem(onClick = {
                             navHostController.navigate("settings")
@@ -101,7 +110,7 @@ fun ContactsScreen(navHostController: NavHostController) {
             }
         }
     ) {
-            innerPadding -> ContactsScreenContent(modifier = Modifier.padding(innerPadding))
+            innerPadding -> ContactsScreenContent(modifier = Modifier.padding(innerPadding), openModal, {openModal = !openModal})
 
     }
 }
@@ -116,20 +125,36 @@ fun Testing() {
     Scaffold (
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
                 title = {
                     Text("Contacts")
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
+                        IconButton(onClick = {
 //                        navHostController.navigate("sosMessaging")
-                    }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "ArrowBack")
-                    }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "ArrowBack"
+                            )
+                        }
+
                 },
                 actions = {
+                    Row{
+                        IconButton(onClick = {}) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                        }
                     IconButton(onClick = { expanded = !expanded }) {
-                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Add Contacts")
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "Add Contacts"
+                        )
                     }
+                }
                     DropdownMenu(expanded = expanded, onDismissRequest = {expanded = false}) {
                         DropdownMenuItem(onClick = {}, text = { Text("Settings") }, leadingIcon = {
                             Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
@@ -146,14 +171,14 @@ fun Testing() {
             }
         }
     ) {
-            innerPadding -> ContactsScreenContent(modifier = Modifier.padding(innerPadding))
+            innerPadding -> ContactsScreenContent(modifier = Modifier.padding(innerPadding), openModal, {openModal = !openModal})
     }
 }
 
 @Composable
-fun ContactsScreenContent(modifier: Modifier) {
+fun ContactsScreenContent(modifier: Modifier, openModal: Boolean, onDismiss: () -> Unit) {
 
-    var openModal by remember { mutableStateOf(false) }
+//    var openModal by remember { mutableStateOf(false) }
 
     Column (modifier = modifier) {
         Spacer(modifier = Modifier.height(10.dp))
@@ -172,7 +197,7 @@ fun ContactsScreenContent(modifier: Modifier) {
         ContactsCard(contactList.get(1))
 
         if (openModal) {
-            AddContactDialog({openModal = !openModal})
+            AddContactDialog(onDismiss)
         }
     }
 
@@ -226,8 +251,12 @@ fun AddContactModal(onDismiss: () -> Unit) {
     var contactNumber by remember { mutableStateOf("") }
     var checked by remember { mutableStateOf(false) }
 
-    Card (modifier = Modifier.fillMaxWidth().padding(10.dp), elevation = CardDefaults.cardElevation(defaultElevation = 2.dp), shape = RoundedCornerShape(10.dp)) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(10.dp)) {
+    Card (modifier = Modifier
+        .fillMaxWidth()
+        .padding(10.dp), elevation = CardDefaults.cardElevation(defaultElevation = 2.dp), shape = RoundedCornerShape(10.dp)) {
+        Column (modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)) {
             Text("Add Contact", style = MaterialTheme.typography.titleLarge)
             OutlinedTextField(value = contactName, onValueChange = {contactName = it}, label = { Text("Contact Name") })
             OutlinedTextField(
