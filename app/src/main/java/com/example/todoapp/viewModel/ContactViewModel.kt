@@ -18,4 +18,13 @@ class ContactViewModel(application: Application): AndroidViewModel(application) 
     fun addContacts(contact: Contact) = viewModelScope.launch {
         repository.addContact(contact)
     }
+
+    fun updateContacts(contact: Contact) = viewModelScope.launch {
+        repository.updateContact(contact)
+    }
+
+    fun deleteContacts(contact: Contact) = viewModelScope.launch {
+        repository.deleteContact(contact)
+    }
+
 }

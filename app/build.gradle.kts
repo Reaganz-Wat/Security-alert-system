@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.todoapp"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -90,5 +90,18 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
+
+
+    // .............THIS IS FOR ANDROID WEAR................
+    implementation("androidx.wear.compose:compose-foundation:1.4.0")
+
+    // For Wear Material Design UX guidelines and specifications
+    implementation("androidx.wear.compose:compose-material:1.4.0")
+
+    // For integration between Wear Compose and Androidx Navigation libraries
+    implementation("androidx.wear.compose:compose-navigation:1.4.0")
+
+    // For Wear preview annotations
+    implementation("androidx.wear.compose:compose-ui-tooling:1.4.0")
 
 }
