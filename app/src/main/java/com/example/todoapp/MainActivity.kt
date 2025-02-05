@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -24,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,8 +55,9 @@ fun AppNavigation() {
         composable("sosMessaging") {SOSMessagingScreen(navController)}
         composable("profile") {ProfileScreen(navController)}
         composable("contacts") {ContactsScreen(navController)}
-        composable("activities") {ActivitiesScreen()}
+        composable("activities") {ActivitiesScreen(navController)}
         composable("settings") {SettingsScreen(navController)}
+        composable("logsDetails") { LogsDetails(navController) }
     }
 }
 
