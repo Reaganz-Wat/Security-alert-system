@@ -1,4 +1,6 @@
 package com.example.todoapp
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,16 +36,32 @@ import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.ui.theme.TodoAppTheme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var powerButtonReceiver: PowerButtonReceiver
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
+
+        powerButtonReceiver = PowerButtonReceiver()
+
+        // Register the receiver for power button events
+        registerReceiver(
+            powerButtonReceiver,
+            IntentFilter(Intent.ACTION_SCREEN_OFF)
+        )
 
         setContent {
             TodoAppTheme {
                 AppNavigation()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(powerButtonReceiver)
     }
 }
 
