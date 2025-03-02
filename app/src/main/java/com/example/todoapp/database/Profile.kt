@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class Profile(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "contact") val contact: String,
-    @ColumnInfo(name = "address") val address: String
+    @ColumnInfo(name = "name") val name: String = "Edit your name here",
+    @ColumnInfo(name = "email") val email: String = "Edit your email here",
+    @ColumnInfo(name = "contact") val contact: String = "Edit your contact here",
+    @ColumnInfo(name = "address") val address: String = "Edit your address here"
 )
