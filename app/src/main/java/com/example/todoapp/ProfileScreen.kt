@@ -1,5 +1,6 @@
 package com.example.todoapp
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -32,18 +33,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.todoapp.database.Profile
+import com.example.todoapp.viewModel.ContactViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,9 +100,35 @@ fun TestingProfileScreen() {
 }
 
 @Composable
-fun MainContent(modifier: Modifier) {
+fun MainContent(modifier: Modifier, viewModel: ContactViewModel = viewModel()) {
 
     var openDialog by remember { mutableStateOf(false) }
+    val profileDetails by viewModel.profileInfo.collectAsState(initial = emptyList())
+
+// Default empty values
+    val defaultProfile = Profile(
+        name = "",
+        email = "",
+        contact = "",
+        address = ""
+    )
+
+    // Safely get profile or use default
+    val profile = profileDetails.firstOrNull() ?: defaultProfile
+
+    // Use remember with default values from profile
+    var name by remember { mutableStateOf(profile.name ?: "") }
+    var email by remember { mutableStateOf(profile.email ?: "") }
+    var contact by remember { mutableStateOf(profile.contact ?: "") }
+    var address by remember { mutableStateOf(profile.address ?: "") }
+
+    // Update the values whenever profile changes
+    LaunchedEffect (profile) {
+        name = profile.name ?: ""
+        email = profile.email ?: ""
+        contact = profile.contact ?: ""
+        address = profile.address ?: ""
+    }
 
     Column (modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(20.dp))
@@ -111,7 +144,7 @@ fun MainContent(modifier: Modifier) {
         }
         Spacer(modifier = Modifier.height(5.dp))
 
-        Text(text = "Watmon Reagan", style = MaterialTheme.typography.titleLarge)
+        Text(text = name, style = MaterialTheme.typography.titleLarge)
 
         Card (modifier = Modifier
             .fillMaxWidth()
@@ -119,10 +152,10 @@ fun MainContent(modifier: Modifier) {
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Column (horizontalAlignment = Alignment.Start, modifier = Modifier.padding(10.dp)) {
-                CardText("Name:", "Watmon Reagan")
-                CardText("Email:", "reaganwatmon6@gmail.com")
-                CardText("Contact:", "0780807525")
-                CardText("Address:", "Bardege Airfield")
+                CardText("Name:", name)
+                CardText("Email:", email)
+                CardText("Contact:", contact)
+                CardText("Address:", address)
             }
 
             Button(onClick = {openDialog = !openDialog}, modifier = Modifier.padding(start = 10.dp, bottom = 10.dp), shape = RoundedCornerShape(10.dp)) {
@@ -131,7 +164,7 @@ fun MainContent(modifier: Modifier) {
         }
 
         if (openDialog) {
-            ProfileModal({openDialog = !openDialog})
+            ProfileModal({openDialog = !openDialog}, viewModel = viewModel, currentProfile = profileDetails[0])
         }
     }
 }
@@ -147,24 +180,28 @@ fun CardText(title: String, value: String) {
 }
 
 @Composable
-fun ProfileModal(onDismiss: () -> Unit) {
+fun ProfileModal(onDismiss: () -> Unit, viewModel: ContactViewModel, currentProfile: Profile) {
     Dialog(
         onDismissRequest = {
             onDismiss()
         }
     ) {
-        EditProfileFields(onDismiss)
+        EditProfileFields(onDismiss, viewModel = viewModel, currentProfile = currentProfile)
     }
 }
 
 //@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun EditProfileFields(onDismiss: () -> Unit) {
+fun EditProfileFields(onDismiss: () -> Unit, viewModel: ContactViewModel,currentProfile: Profile) {
 
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var contact by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf(currentProfile.name) }
+    var email by remember { mutableStateOf(currentProfile.email) }
+    var contact by remember { mutableStateOf(currentProfile.contact) }
+    var address by remember { mutableStateOf(currentProfile.address) }
+
+
+
+    val context = LocalContext.current
 
     Card (modifier = Modifier
         .fillMaxWidth()
@@ -208,7 +245,24 @@ fun EditProfileFields(onDismiss: () -> Unit) {
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
-                    onClick = {onDismiss()},
+                    onClick = {
+                        val updatedProfile = currentProfile.copy(
+                            name = name,
+                            email = email,
+                            contact = contact,
+                            address = address
+                        )
+
+                        if (updatedProfile.uid != null) {
+                            viewModel.updateProfile(updatedProfile)
+                        } else {
+                            viewModel.createProfile(updatedProfile)
+                        }
+
+                        // show some tast
+                        Toast.makeText(context, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
+
+                        onDismiss()},
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.weight(1f)
                 ) {

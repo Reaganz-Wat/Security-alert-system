@@ -1,6 +1,5 @@
 package com.example.todoapp
 
-import android.provider.ContactsContract.CommonDataKinds.Phone
 
 data class ActivitiesScreenDetails(
     val date: String,
