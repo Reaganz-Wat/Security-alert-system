@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.todoapp.database.AppDatabase
 import com.example.todoapp.database.Contact
 import com.example.todoapp.database.Profile
-import com.example.todoapp.database.ProfileDao
 import com.example.todoapp.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
