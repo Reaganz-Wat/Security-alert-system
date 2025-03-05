@@ -14,6 +14,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -131,11 +133,11 @@ fun SOSMessagingScreen(navController: NavHostController) {
                     }
                     Column {
                         Text(
-                            text = "Advanced SOS",
+                            text = "SOS Alert",
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = "Messaging",
+                            text = "be safe, be alert",
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
@@ -154,7 +156,9 @@ fun SOSMessagingScreen(navController: NavHostController) {
                     MenuItem("Profile", Icons.Default.AccountCircle, "profile"),
                     MenuItem("Contacts", Icons.Default.Call, "contacts"),
                     MenuItem("Activities", Icons.Default.Info, "activities"),
-                    MenuItem("Settings", Icons.Default.Settings, "settings")
+                    MenuItem("Settings", Icons.Default.Settings, "settings"),
+                    MenuItem("Edit Timer", Icons.Default.DateRange, "settings"),
+                    MenuItem("Edit SOS Messages", Icons.Default.Edit, "settings")
                 )
 
                 items(menuItems) { item ->
