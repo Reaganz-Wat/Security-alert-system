@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -93,12 +94,13 @@ fun SOSMessagingScreen(navController: NavHostController) {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text(text = "Hi Reagan", style = MaterialTheme.typography.titleLarge)
+                    Text(text = "Hello", style = MaterialTheme.typography.titleLarge)
                 }, actions = {
                     Image(
                         painter = painterResource(id = R.drawable.logo),
                         contentDescription = null,
-                        modifier = Modifier.padding(end = 8.dp)
+                        modifier = Modifier
+                            .padding(end = 8.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .size(50.dp)
                     )
@@ -106,63 +108,74 @@ fun SOSMessagingScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // SOS Message Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
-                    Box(modifier = Modifier.clip(RoundedCornerShape(10.dp))){
-                        Image(
-                            painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "SOS Icon",
-                            modifier = Modifier.size(100.dp)
-                        )
-                    }
-                    Column {
-                        Text(
-                            text = "SOS Alert",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text(
-                            text = "be safe, be alert",
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                    Row(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        Box(modifier = Modifier.clip(RoundedCornerShape(10.dp))) {
+                            Image(
+                                painter = painterResource(id = R.drawable.logo),
+                                contentDescription = "SOS Icon",
+                                modifier = Modifier.size(100.dp)
+                            )
+                        }
+                        Column {
+                            Text(
+                                text = "SOS Alert",
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                text = "be safe, be alert",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
                     }
                 }
             }
 
-            Text(text = "All Menu")
+            // Text
+            item { Text(text = "All Menu") }
 
             // Menu Grid
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                val menuItems = listOf(
-                    MenuItem("Profile", Icons.Default.AccountCircle, "profile"),
-                    MenuItem("Contacts", Icons.Default.Call, "contacts"),
-                    MenuItem("Activities", Icons.Default.Info, "activities"),
-                    MenuItem("Settings", Icons.Default.Settings, "settings"),
-                    MenuItem("Edit Timer", Icons.Default.DateRange, "settings"),
-                    MenuItem("Edit SOS Messages", Icons.Default.Edit, "settings")
-                )
+            item {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 800.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    userScrollEnabled = false
+                ) {
+                    val menuItems = listOf(
+                        MenuItem("Profile", Icons.Default.AccountCircle, "profile"),
+                        MenuItem("Contacts", Icons.Default.Call, "contacts"),
+                        MenuItem("Activities", Icons.Default.Info, "activities"),
+                        MenuItem("Settings", Icons.Default.Settings, "settings"),
+                        MenuItem("Edit Timer", Icons.Default.DateRange, "settings"),
+                        MenuItem("Edit SOS Messages", Icons.Default.Edit, "settings")
+                    )
 
-                items(menuItems) { item ->
-                    MenuCard(item, navController)
+                    items(menuItems) { item ->
+                        MenuCard(item, navController)
+                    }
+
+                   item { Spacer(modifier = Modifier.height(10.dp)) }
                 }
             }
         }
