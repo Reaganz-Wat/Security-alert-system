@@ -79,6 +79,8 @@ fun AppNavigation() {
         composable("activities") {ActivitiesScreen(navController)}
         composable("settings") {SettingsScreen(navController)}
         composable("logsDetails") { LogsDetails(navController) }
+        composable("editSOSMessaging") { EditSOSMessage(navController) }
+        composable("timer") { Timer(navController) }
     }
 }
 
@@ -167,8 +169,8 @@ fun SOSMessagingScreen(navController: NavHostController) {
                         MenuItem("Contacts", Icons.Default.Call, "contacts"),
                         MenuItem("Activities", Icons.Default.Info, "activities"),
                         MenuItem("Settings", Icons.Default.Settings, "settings"),
-                        MenuItem("Edit Timer", Icons.Default.DateRange, "settings"),
-                        MenuItem("Edit SOS Messages", Icons.Default.Edit, "settings")
+                        MenuItem("Edit Timer", Icons.Default.DateRange, "timer"),
+                        MenuItem("Edit SOS Messages", Icons.Default.Edit, "editSOSMessaging")
                     )
 
                     items(menuItems) { item ->

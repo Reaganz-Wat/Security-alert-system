@@ -73,34 +73,13 @@ fun ProfileScreen(navController: NavHostController) {
             )
         }
     ) {
-            innerPadding -> MainContent(modifier = Modifier.padding(innerPadding))
+            innerPadding -> ProfileMainContent(modifier = Modifier.padding(innerPadding))
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun TestingProfileScreen() {
-    Scaffold (
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text("Profile")
-                },
-                navigationIcon = {
-                    IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back Arrow")
-                    }
-                }
-            )
-        }
-    ) {
-        innerPadding -> MainContent(modifier = Modifier.padding(innerPadding))
-    }
-}
 
 @Composable
-fun MainContent(modifier: Modifier, viewModel: ContactViewModel = viewModel()) {
+fun ProfileMainContent(modifier: Modifier, viewModel: ContactViewModel = viewModel()) {
 
     var openDialog by remember { mutableStateOf(false) }
     val profileDetails by viewModel.profileInfo.collectAsState(initial = emptyList())
