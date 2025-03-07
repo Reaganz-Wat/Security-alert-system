@@ -6,16 +6,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.todoapp.database.AppDatabase
 import com.example.todoapp.database.Contact
 import com.example.todoapp.database.Profile
+import com.example.todoapp.database.SOSMessage
 import com.example.todoapp.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class ContactViewModel(application: Application): AndroidViewModel(application) {
     private val database = AppDatabase.getDatabase(application)
-    private val repository = AppRepository(database.contactDao(), database.profileDao())
+    private val repository = AppRepository(database.contactDao(), database.profileDao(), database.SOSMessageDao())
 
     val allContacts: Flow<List<Contact>> = repository.getAllContacts
     val profileInfo: Flow<List<Profile>> = repository.getProfileInfo
+    val SOSMessage: Flow<List<SOSMessage>> = repository.getSOSMessage
 
     fun addContacts(contact: Contact) = viewModelScope.launch {
         repository.addContact(contact)
@@ -40,6 +42,18 @@ class ContactViewModel(application: Application): AndroidViewModel(application) 
 
     fun deleteProfile(profile: Profile) = viewModelScope.launch {
         repository.deleteProfile(profile)
+    }
+
+    fun createSOSMessage(sosMessage: SOSMessage) = viewModelScope.launch {
+        repository.addSOSMessage(sosMessage)
+    }
+
+    fun editSOSMessage(sosMessage: SOSMessage) = viewModelScope.launch {
+        repository.updateSOSMessage(sosMessage)
+    }
+
+    fun deleteSOSMessage(sosMessage: SOSMessage) = viewModelScope.launch {
+        repository.deleteSOSmessage(sosMessage)
     }
 
 }

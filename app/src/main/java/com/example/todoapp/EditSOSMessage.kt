@@ -1,5 +1,6 @@
 package com.example.todoapp
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,21 +19,42 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.OutlinedButton
+import com.example.todoapp.database.SOSMessage
+import com.example.todoapp.viewModel.ContactViewModel
 
 @Composable
-fun MainContent(modifier: Modifier = Modifier) {
+fun EditMessageContent(modifier: Modifier = Modifier, viewModal: ContactViewModel = viewModel()) {
+
+    val context = LocalContext.current
+    val SOSMessageDeails by viewModal.SOSMessage.collectAsState(initial = emptyList())
+
 
     // State for the message
-    var message by remember { mutableStateOf("") }
+    var message by remember {
+        mutableStateOf("")
+    }
+
+    LaunchedEffect (SOSMessageDeails) {
+        if (SOSMessageDeails.isNotEmpty()) {
+            message = SOSMessageDeails[0].message
+        } else {
+            Toast.makeText(context, "There is no message available in database", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Column(
         modifier = modifier
@@ -63,9 +85,16 @@ fun MainContent(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(10.dp))
 
         // OutlinedButton to save the message
-        OutlinedButton(
+        Button (
             onClick = {
-                // Handle Save logic here (e.g., save to a database or show a confirmation)
+                var messageInfo = SOSMessage(message = message)
+                if (SOSMessageDeails.isNotEmpty()) {
+                    messageInfo = SOSMessageDeails[0].copy(message = message)
+                    viewModal.editSOSMessage(messageInfo) // Fixing function call
+                } else {
+                    viewModal.createSOSMessage(messageInfo)
+                }
+                Toast.makeText(context, "Message Updated Successfully", Toast.LENGTH_SHORT).show()
             },
             modifier = Modifier.fillMaxWidth() // Make the button span the entire width
         ) {
@@ -94,6 +123,29 @@ fun EditSOSMessage(navController: NavHostController) {
             )
         }
     ) {
-            innerPadding -> MainContent (modifier = Modifier.padding(innerPadding))
+            innerPadding -> EditMessageContent (modifier = Modifier.padding(innerPadding))
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PreviewMessaging() {
+    Scaffold (
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Edit SOS Message")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                    }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow Back")
+                    }
+                }
+            )
+        }
+    ) {
+            innerPadding -> EditMessageContent (modifier = Modifier.padding(innerPadding))
     }
 }

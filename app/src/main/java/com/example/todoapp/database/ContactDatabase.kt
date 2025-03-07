@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Contact::class, Profile::class], version = 2)
+@Database(entities = [Contact::class, Profile::class, SOSMessage::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun contactDao(): ContactDao
     abstract fun profileDao(): ProfileDao
+    abstract fun SOSMessageDao(): SOSMessageDao
 
     companion object {
         @Volatile
