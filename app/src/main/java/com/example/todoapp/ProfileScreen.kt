@@ -81,6 +81,8 @@ fun ProfileScreen(navController: NavHostController) {
 @Composable
 fun ProfileMainContent(modifier: Modifier, viewModel: ContactViewModel = viewModel()) {
 
+    val context = LocalContext.current
+
     var openDialog by remember { mutableStateOf(false) }
     val profileDetails by viewModel.profileInfo.collectAsState(initial = emptyList())
 
@@ -142,8 +144,12 @@ fun ProfileMainContent(modifier: Modifier, viewModel: ContactViewModel = viewMod
             }
         }
 
+        if (true) {
+            Toast.makeText(context, "Something here: ${profileDetails.firstOrNull()}", Toast.LENGTH_SHORT).show()
+        }
+
         if (openDialog) {
-            ProfileModal({openDialog = !openDialog}, viewModel = viewModel, currentProfile = profileDetails[0])
+            ProfileModal({openDialog = !openDialog}, viewModel = viewModel, currentProfile = profileDetails.firstOrNull() ?: defaultProfile)
         }
     }
 }
