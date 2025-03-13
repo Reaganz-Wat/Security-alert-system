@@ -80,7 +80,7 @@ fun AppNavigation() {
         composable("settings") {SettingsScreen(navController)}
         composable("logsDetails") { LogsDetails(navController) }
         composable("editSOSMessaging") { EditSOSMessage(navController) }
-        composable("timer") { Timer(navController) }
+        composable("timer") { TimerSettingsScreen(navController) }
     }
 }
 
@@ -211,10 +211,10 @@ fun MenuCard(item: MenuItem, navController: NavHostController) {
             Icon(
                 imageVector = item.icon,
                 contentDescription = item.title,
-                modifier = Modifier.size(70.dp),
+                modifier = Modifier.size(55.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.bodyLarge
