@@ -2,6 +2,7 @@ package com.example.todoapp
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 
 class PowerButtonReceiver : BroadcastReceiver() {
     private val pressTimeWindow = 1000L // 1 second window for consecutive presses
@@ -10,12 +11,23 @@ class PowerButtonReceiver : BroadcastReceiver() {
     private var pressCount = 0
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_SCREEN_OFF) {
+        Log.d("PowerButtonReceiver", "onReceive called with action: ${intent.action}")
+
+        // Check for both screen on and off actions
+        if (intent.action == Intent.ACTION_SCREEN_OFF ||
+            intent.action == Intent.ACTION_SCREEN_ON) {
+
             val currentTime = System.currentTimeMillis()
+            val timeSinceLastPress = currentTime - lastPressTime
+
+            Log.d("PowerButtonReceiver", "Power button pressed. Time since last press: $timeSinceLastPress ms")
 
             if (currentTime - lastPressTime <= pressTimeWindow) {
                 pressCount++
+                Log.d("PowerButtonReceiver", "Press within time window. Press count: $pressCount")
+
                 if (pressCount >= requiredPresses) {
+                    Log.d("PowerButtonReceiver", "Required press count reached! Launching messaging app.")
                     // Reset counter
                     pressCount = 0
                     // Launch messaging app
@@ -23,6 +35,7 @@ class PowerButtonReceiver : BroadcastReceiver() {
                 }
             } else {
                 // Reset counter if time window exceeded
+                Log.d("PowerButtonReceiver", "Time window exceeded. Resetting press count to 1")
                 pressCount = 1
             }
             lastPressTime = currentTime
@@ -30,10 +43,16 @@ class PowerButtonReceiver : BroadcastReceiver() {
     }
 
     private fun launchMessagingApp(context: Context) {
+        Log.d("PowerButtonReceiver", "Attempting to launch messaging app")
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_APP_MESSAGING)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
-        context.startActivity(intent)
+        try {
+            context.startActivity(intent)
+            Log.d("PowerButtonReceiver", "Messaging app launch successful")
+        } catch (e: Exception) {
+            Log.e("PowerButtonReceiver", "Failed to launch messaging app", e)
+        }
     }
 }

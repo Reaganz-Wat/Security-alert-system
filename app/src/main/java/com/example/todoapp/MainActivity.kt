@@ -49,11 +49,17 @@ class MainActivity : ComponentActivity() {
 
         powerButtonReceiver = PowerButtonReceiver()
 
+        val intentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_SCREEN_ON)
+        }
+        registerReceiver(powerButtonReceiver, intentFilter)
+
         // Register the receiver for power button events
-        registerReceiver(
-            powerButtonReceiver,
-            IntentFilter(Intent.ACTION_SCREEN_OFF)
-        )
+//        registerReceiver(
+//            powerButtonReceiver,
+//            IntentFilter(Intent.ACTION_SCREEN_OFF)
+//        )
 
         setContent {
             TodoAppTheme {
