@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-03-07T00:33:10.495208700Z">
+        <DropdownSelection timestamp="2025-03-15T14:23:12.301340800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=11003373AO044689" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\reaga\.android\avd\Nice_Phone.avd" />
             </handle>
           </Target>
         </DropdownSelection>
