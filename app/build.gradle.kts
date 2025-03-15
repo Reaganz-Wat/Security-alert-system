@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android") version "2.48" apply false
 }
 
 android {
@@ -104,4 +105,12 @@ dependencies {
     // For Wear preview annotations
     implementation("androidx.wear.compose:compose-ui-tooling:1.4.0")
 
+    // DI using Hilt
+    // Hilt Core
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+
+
+    // Hilt for ViewModels
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 }
