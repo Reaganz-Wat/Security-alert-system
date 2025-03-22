@@ -113,4 +113,7 @@ dependencies {
 
     // Hilt for ViewModels
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
+    // Twilio API
+    implementation("com.twilio.sdk:twilio:10.0.0")
 }
