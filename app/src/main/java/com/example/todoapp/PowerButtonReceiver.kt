@@ -65,6 +65,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 
 class PowerButtonReceiver : BroadcastReceiver() {
     private val pressTimeWindow = 1000L // 1 second window for consecutive presses
@@ -72,6 +73,7 @@ class PowerButtonReceiver : BroadcastReceiver() {
     private var lastPressTime = 0L
     private var pressCount = 0
     private val countdownSeconds = 5 // Default countdown time
+    private val message: String = "Hello, someone wants to kidnap me help!!"
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("PowerButtonReceiver", "onReceive called with action: ${intent.action}")
@@ -117,6 +119,7 @@ class PowerButtonReceiver : BroadcastReceiver() {
         try {
             context.startActivity(intent)
             Log.d("PowerButtonReceiver", "Emergency countdown activity launched")
+            Toast.makeText(context ,"Gone from something now", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             Log.e("PowerButtonReceiver", "Failed to launch emergency countdown", e)
         }

@@ -3,6 +3,7 @@ package com.example.todoapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -22,17 +23,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.ui.theme.TodoAppTheme
+import com.example.todoapp.viewModel.ContactViewModel
 import kotlinx.coroutines.delay
 
 class EmergencyCountdownActivity : ComponentActivity() {
@@ -63,7 +69,7 @@ class EmergencyCountdownActivity : ComponentActivity() {
     private fun cancelEmergency() {
         Log.d(TAG, "Emergency countdown cancelled by user")
         // Send broadcast to cancel emergency in service
-        sendBroadcast(Intent("com.example.todoapp.CANCEL_EMERGENCY"))
+//        sendBroadcast(Intent("com.example.todoapp.CANCEL_EMERGENCY"))
         finish()
     }
 
@@ -77,12 +83,26 @@ class EmergencyCountdownActivity : ComponentActivity() {
 @Composable
 fun EmergencyCountdownScreen(
     countdownSeconds: Int,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    viewModel: ContactViewModel = viewModel()
 ) {
     var secondsRemaining by remember { mutableIntStateOf(countdownSeconds) }
     val progress = remember(secondsRemaining) {
         (countdownSeconds - secondsRemaining).toFloat() / countdownSeconds
     }
+
+    val messageInformation by viewModel.SOSMessage.collectAsState(initial = emptyList())
+
+    // Ensure there is a message available
+    var messageText = "Please help!!"
+
+    if (messageInformation.isNotEmpty()) {
+        messageText = messageInformation[0].message
+    } else {
+        // do nothing
+    }
+
+    val context = LocalContext.current
 
     // Countdown timer effect
     LaunchedEffect(Unit) {
@@ -91,6 +111,7 @@ fun EmergencyCountdownScreen(
             secondsRemaining--
         }
         // When countdown reaches zero, activity will be finished by the service
+        Toast.makeText(context, messageText, Toast.LENGTH_SHORT).show()
     }
 
     Box(
