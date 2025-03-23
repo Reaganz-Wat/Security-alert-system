@@ -1,4 +1,6 @@
 package com.example.todoapp
+
+
 import android.util.Log
 import com.twilio.Twilio
 import com.twilio.rest.api.v2010.account.Message
@@ -8,11 +10,14 @@ import kotlinx.coroutines.withContext
 
 class SmsService {
     companion object {
-
+        private const val TAG = "SmsService"
+        private const val ACCOUNT_SID = "YOUR_ACCOUNT_SID" // Replace with your Twilio Account SID
+        private const val AUTH_TOKEN = "YOUR_AUTH_TOKEN"   // Replace with your Twilio Auth Token
+        private const val FROM_NUMBER = "+15017250604"     // Replace with your Twilio phone number
     }
 
     /**
-     * Sends an SMS message via Twilio using Messaging Service
+     * Sends an SMS message via Twilio
      * Must be called from a background thread or coroutine
      */
     suspend fun sendSms(toNumber: String, messageBody: String): Boolean = withContext(Dispatchers.IO) {
@@ -20,10 +25,10 @@ class SmsService {
             // Initialize Twilio client
             Twilio.init(ACCOUNT_SID, AUTH_TOKEN)
 
-            // Send message using Messaging Service SID instead of FROM_NUMBER
+            // Send message
             val message = Message.creator(
                 PhoneNumber(toNumber),
-                MESSAGING_SERVICE_SID,
+                PhoneNumber(FROM_NUMBER),
                 messageBody
             ).create()
 
