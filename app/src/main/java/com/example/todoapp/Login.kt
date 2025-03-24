@@ -42,7 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -158,11 +160,10 @@ fun LoginContent(modifier: Modifier = Modifier, navController: NavHostController
                 },
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-//                        Icon(
-//                            imageVector = if (passwordVisible) Icons.Default.Lock else Icons.Default.Close,
-//                            contentDescription = if (passwordVisible) "Hide Password" else "Show Password"
-//                        )
-                        Image(painterResource(if (passwordVisible) R.drawable.visible_eye else R.drawable.baseline_visibility_off_24), contentDescription = if (passwordVisible) "" else "")
+                        Icon(
+                            imageVector = ImageVector.vectorResource( if (passwordVisible) R.drawable.baseline_visibility_24 else R.drawable.baseline_visibility_off_24),
+                            contentDescription = if (passwordVisible) "Hide Password" else "Show Password"
+                        )
                     }
                 },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
