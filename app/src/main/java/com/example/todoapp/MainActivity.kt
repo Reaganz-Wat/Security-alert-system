@@ -78,7 +78,8 @@ class MainActivity : ComponentActivity() {
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "sosMessaging") {
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") { Login(navController) }
         composable("sosMessaging") {SOSMessagingScreen(navController)}
         composable("profile") {ProfileScreen(navController)}
         composable("contacts") {ContactsScreen(navController)}

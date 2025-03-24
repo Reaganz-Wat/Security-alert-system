@@ -51,23 +51,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewLogin() {
-    Login()
+//    Login()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login() {
+fun Login(navController: NavHostController) {
     Scaffold { innerPadding ->
-        LoginContent(modifier = Modifier.padding(innerPadding))
+        LoginContent(modifier = Modifier.padding(innerPadding), navController)
     }
 }
 
 @Composable
-fun LoginContent(modifier: Modifier = Modifier) {
+fun LoginContent(modifier: Modifier = Modifier, navController: NavHostController) {
     // States
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -184,7 +187,9 @@ fun LoginContent(modifier: Modifier = Modifier) {
 
             // Login Button
             Button(
-                onClick = { /* Login action */ },
+                onClick = {
+                    navController.navigate("sosMessaging")
+                },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 elevation = ButtonDefaults.buttonElevation(
