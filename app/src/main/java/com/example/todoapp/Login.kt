@@ -174,7 +174,9 @@ fun LoginContent(modifier: Modifier = Modifier, navController: NavHostController
 
             // Forgot password
             TextButton(
-                onClick = { /* Forgot password action */ },
+                onClick = {
+                    navController.navigate("forgot password")
+                },
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Text(
@@ -301,7 +303,9 @@ fun LoginContent(modifier: Modifier = Modifier, navController: NavHostController
                     text = "Don't have an account?",
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 )
-                TextButton(onClick = { /* Sign up action */ }) {
+                TextButton(onClick = {
+                    navController.navigate("signup")
+                }) {
                     Text(
                         text = "Sign Up",
                         fontWeight = FontWeight.Bold,

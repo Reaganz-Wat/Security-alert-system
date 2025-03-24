@@ -88,6 +88,8 @@ fun AppNavigation() {
         composable("logsDetails") { LogsDetails(navController) }
         composable("editSOSMessaging") { EditSOSMessage(navController) }
         composable("timer") { TimerSettingsScreen(navController) }
+        composable("forgot password") { ForgotPassword(navController) }
+        composable("signup") { SignUp(navController) }
     }
 }
 
