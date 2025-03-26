@@ -32,7 +32,7 @@ import com.example.todoapp.local.entities.UserEntity
     ],
     version = 1
 )
-abstract class AppDatabase : RoomDatabase() {
+abstract class MyAppDatabase : RoomDatabase() {
     abstract fun appSettingsDao(): AppSettingsDao
     abstract fun userDao(): UserDao
     abstract fun contactDao(): ContactDao
@@ -43,13 +43,13 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private var INSTANCE: MyAppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        fun getDatabase(context: Context): MyAppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDatabase::class.java,
+                    MyAppDatabase::class.java,
                     "app_database"
                 ).build()
                 INSTANCE = instance
