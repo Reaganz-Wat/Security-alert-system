@@ -16,7 +16,7 @@ import com.example.todoapp.repository.MyAppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class AppViewModel(application: Application) : AndroidViewModel(application) {
+class MyviewModel(application: Application) : AndroidViewModel(application) {
     private val database = MyAppDatabase.getDatabase(application)
     private val repository = MyAppRepository(database)
 

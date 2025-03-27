@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.todoapp.local.DateTypeConverter
 import com.example.todoapp.local.dao.AppSettingsDao
 import com.example.todoapp.local.dao.ContactDao
 import com.example.todoapp.local.dao.MessageMediaDao
@@ -32,6 +34,7 @@ import com.example.todoapp.local.entities.UserEntity
     ],
     version = 1
 )
+@TypeConverters(DateTypeConverter::class)
 abstract class MyAppDatabase : RoomDatabase() {
     abstract fun appSettingsDao(): AppSettingsDao
     abstract fun userDao(): UserDao
