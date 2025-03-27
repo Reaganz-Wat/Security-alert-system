@@ -329,9 +329,9 @@
 
 package com.example.todoapp
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -348,7 +348,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
@@ -374,10 +373,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -388,13 +385,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
+import com.example.todoapp.local.entities.UserEntity
 import com.example.todoapp.viewModel.MyviewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -581,7 +578,7 @@ fun LoginContent(
                                 if (user != null) {
                                     // Successful login
 
-                                    Log.d("User details: ", user.password)
+                                    SaveUserData(context, user)
 
                                     Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT)
                                         .show()
@@ -739,3 +736,46 @@ fun LoginContent(
         }
     }
 }
+
+fun SaveUserData(context: Context, user: UserEntity) {
+    val sharedPreferences = context.getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.putString("userId", user.id.toString())
+    editor.putString("userName", user.fullName)
+    editor.putString("userEmail", user.email)
+    editor.putString("address", user.address)
+    editor.putString("password", user.password)
+    editor.putString("phoneNumber", user.phoneNumber) // Save the token or password if necessary
+    editor.apply()  // Asynchronous save
+}
+
+fun getUserData(context: Context): UserEntity? {
+    val sharedPreferences = context.getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
+
+    val userId = sharedPreferences.getString("userId", null)
+    val userName = sharedPreferences.getString("userName", null)
+    val userEmail = sharedPreferences.getString("userEmail", null)
+    val address = sharedPreferences.getString("address", null)
+    val phoneNumber = sharedPreferences.getString("phoneNumber", null)
+    val password = sharedPreferences.getString("password", null)
+
+    // Return null if any required data is missing
+    if (userId == null || userName == null || userEmail == null || address == null || phoneNumber == null || password == null) {
+        return null
+    }
+
+    // Return the user data if all fields are present
+    return UserEntity(
+        id = userId.toInt(),
+        fullName = userName,
+        email = userEmail,
+        address = address,
+        password = password,
+        phoneNumber = phoneNumber,
+        dateCreated = Date(), // Default value or fetched date
+        createdBy = "defaultCreator", // You can replace with actual logic
+        dateModified = Date(), // You can replace with actual logic
+        modifiedBy = "defaultModifier" // You can replace with actual logic
+    )
+}
+
