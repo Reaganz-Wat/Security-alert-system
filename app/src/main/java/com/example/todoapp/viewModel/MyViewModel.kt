@@ -13,6 +13,7 @@ import com.example.todoapp.local.entities.SOSMessageEntity
 import com.example.todoapp.local.entities.TimerEntity
 import com.example.todoapp.local.entities.UserEntity
 import com.example.todoapp.repository.MyAppRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -25,7 +26,7 @@ class MyviewModel(application: Application) : AndroidViewModel(application) {
     val allSOSMessages: Flow<List<SOSMessageEntity>> = repository.getAllSOSMessages
 
     // User operations
-    fun addUser(user: UserEntity) = viewModelScope.launch {
+    fun addUser(user: UserEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.addUser(user)
     }
 

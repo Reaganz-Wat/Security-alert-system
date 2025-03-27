@@ -1,5 +1,6 @@
 package com.example.todoapp
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,7 +31,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.todoapp.local.entities.UserEntity
 import com.example.todoapp.viewModel.MyviewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 import java.util.Date
 
@@ -134,6 +137,47 @@ fun SignUp(
             )
             Spacer(modifier = Modifier.height(20.dp))
 
+//            Button(
+//                onClick = {
+//                    // Validate input fields
+//                    if (validateInput(username, email, password, phoneNumber)) {
+//                        val currentDate = Date()
+//                        val user = UserEntity(
+//                            fullName = username,
+//                            email = email,
+//                            phoneNumber = phoneNumber,
+//                            address = address,
+//                            dateCreated = currentDate,
+//                            createdBy = "SignUp",
+//                            dateModified = currentDate,
+//                            modifiedBy = "SignUp"
+//                        )
+//
+//                        // Add user to database
+//                        viewModel.addUser(user)
+//
+//                        // Show success message
+//                        isRegistrationSuccessful = true
+//
+//                        // Optional: Navigate to next screen or show success dialog
+//                        navHostController?.navigate("login")
+//                    } else {
+//                        // Show error message
+//                        // Using coroutine to show snackbar
+//                        viewModel.viewModelScope.launch {
+//                            snackbarHostState.showSnackbar(
+//                                message = "Please fill all required fields correctly",
+//                                duration = SnackbarDuration.Short
+//                            )
+//                        }
+//                    }
+//                },
+//                modifier = Modifier.fillMaxWidth(),
+//                shape = RoundedCornerShape(10.dp)
+//            ) {
+//                Text("Sign Up")
+//            }
+
             Button(
                 onClick = {
                     // Validate input fields
@@ -150,17 +194,45 @@ fun SignUp(
                             modifiedBy = "SignUp"
                         )
 
-                        // Add user to database
-                        viewModel.addUser(user)
+                        // Launch a coroutine to add user
+//                        viewModel.viewModelScope.launch {
+//                            try {
+//                                viewModel.addUser(user)
+//
+//                                // Show success message
+//                                isRegistrationSuccessful = true
+//
+//                                // Navigate to login screen
+//                                navHostController?.navigate("login")
+//                            } catch (e: Exception) {
+//                                // Handle any potential errors
+//                                snackbarHostState.showSnackbar(
+//                                    message = "Registration failed: ${e.localizedMessage}",
+//                                    duration = SnackbarDuration.Short
+//                                )
+//                            }
+//                        }
 
-                        // Show success message
-                        isRegistrationSuccessful = true
+                        viewModel.viewModelScope.launch(Dispatchers.IO) {
+                            try {
+                                viewModel.addUser(user)
+                                withContext(Dispatchers.Main) {
+                                    // UI-related operations like navigation
+                                    Toast.makeText(context, "Registered successfully", Toast.LENGTH_SHORT).show()
+                                    navHostController?.navigate("login")
+                                }
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    snackbarHostState.showSnackbar(
+                                        message = "Registration failed: ${e.localizedMessage}",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
+                        }
 
-                        // Optional: Navigate to next screen or show success dialog
-                        navHostController?.navigate("login")
                     } else {
-                        // Show error message
-                        // Using coroutine to show snackbar
+                        // Show error message for invalid input
                         viewModel.viewModelScope.launch {
                             snackbarHostState.showSnackbar(
                                 message = "Please fill all required fields correctly",
