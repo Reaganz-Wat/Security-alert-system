@@ -13,6 +13,7 @@ import com.example.todoapp.local.entities.SOSMessageEntity
 import com.example.todoapp.local.entities.TimerEntity
 import com.example.todoapp.local.entities.UserEntity
 import com.example.todoapp.repository.MyAppRepository
+import com.twilio.rest.chat.v1.service.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -40,8 +41,8 @@ class MyviewModel(application: Application) : AndroidViewModel(application) {
         repository.getUserById(userId)
     }
 
-    fun getUserByEmailAndPassword(email: String, password: String) = viewModelScope.launch {
-        withContext(Dispatchers.IO){ repository.getUserByEmailAndPassword(email, password) }
+    suspend fun getUserByEmailAndPassword(email: String, password: String): UserEntity {
+        return withContext(Dispatchers.IO){ repository.getUserByEmailAndPassword(email, password)!! }
     }
 
     // Contact operations

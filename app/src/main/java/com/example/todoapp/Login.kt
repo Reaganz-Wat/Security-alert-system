@@ -574,10 +574,14 @@ fun LoginContent(
                         try {
                             // Assuming getUserByEmailAndPassword returns a user or null
                             val user = viewModel.getUserByEmailAndPassword(email, password)
-                            Log.d("", "")
+
+                            Log.d("User entity", user.email)
+
                             withContext(Dispatchers.Main){
                                 if (user != null) {
                                     // Successful login
+
+                                    Log.d("User details: ", user.password)
 
                                     Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT)
                                         .show()
