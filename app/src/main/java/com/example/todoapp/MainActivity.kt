@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -96,6 +97,11 @@ fun AppNavigation() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SOSMessagingScreen(navController: NavHostController) {
+
+    // get the loggedIn user details
+    val userDetails = getUserData(LocalContext.current)
+    val userName = userDetails?.fullName ?: "Guest"
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -105,7 +111,7 @@ fun SOSMessagingScreen(navController: NavHostController) {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text(text = "Hello", style = MaterialTheme.typography.titleLarge)
+                    Text(text = "Hi ${userName}", style = MaterialTheme.typography.titleLarge)
                 }, actions = {
                     Image(
                         painter = painterResource(id = R.drawable.logo),
