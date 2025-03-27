@@ -16,6 +16,7 @@ import com.example.todoapp.repository.MyAppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MyviewModel(application: Application) : AndroidViewModel(application) {
     private val database = MyAppDatabase.getDatabase(application)
@@ -24,6 +25,7 @@ class MyviewModel(application: Application) : AndroidViewModel(application) {
     // Flows for different entities
     val allContacts: Flow<List<ContactEntity>> = repository.getAllContacts
     val allSOSMessages: Flow<List<SOSMessageEntity>> = repository.getAllSOSMessages
+    val allUsers: Flow<List<UserEntity>> = repository.getAllUsers
 
     // User operations
     fun addUser(user: UserEntity) = viewModelScope.launch(Dispatchers.IO) {
@@ -36,6 +38,10 @@ class MyviewModel(application: Application) : AndroidViewModel(application) {
 
     fun getUserById(userId: Int) = viewModelScope.launch {
         repository.getUserById(userId)
+    }
+
+    fun getUserByEmailAndPassword(email: String, password: String) = viewModelScope.launch {
+        withContext(Dispatchers.IO){ repository.getUserByEmailAndPassword(email, password) }
     }
 
     // Contact operations

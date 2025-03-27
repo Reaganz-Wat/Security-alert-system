@@ -18,13 +18,13 @@ class MyAppRepository(
 ) {
     // User operations
     private val userDao = database.userDao()
-//    val getAllUsers: Flow<List<UserEntity>> = flow {
-//        emit(userDao.)
-//    }
-
+    val getAllUsers: Flow<List<UserEntity>> = userDao.getAllUsers()
     suspend fun addUser(user: UserEntity) = userDao.insert(user)
     suspend fun updateUser(user: UserEntity) = userDao.update(user)
     suspend fun getUserById(userId: Int) = userDao.getUserById(userId)
+    suspend fun getUserByEmailAndPassword(email: String, password: String): UserEntity? {
+        return database.userDao().getUserByEmailAndPassword(email, password)
+    }
 
     // Contact operations
     private val contactDao = database.contactDao()
