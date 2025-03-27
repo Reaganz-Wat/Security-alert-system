@@ -13,6 +13,7 @@ data class UserEntity(
     @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "phone_number") val phoneNumber: String,
     @ColumnInfo(name = "address") val address: String,
+    @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "date_created") val dateCreated: Date,
     @ColumnInfo(name = "created_by") val createdBy: String,
     @ColumnInfo(name = "date_modified") val dateModified: Date,

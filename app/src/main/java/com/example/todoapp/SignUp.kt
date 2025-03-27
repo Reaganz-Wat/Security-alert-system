@@ -188,30 +188,12 @@ fun SignUp(
                             email = email,
                             phoneNumber = phoneNumber,
                             address = address,
+                            password = password,
                             dateCreated = currentDate,
                             createdBy = "SignUp",
                             dateModified = currentDate,
                             modifiedBy = "SignUp"
                         )
-
-                        // Launch a coroutine to add user
-//                        viewModel.viewModelScope.launch {
-//                            try {
-//                                viewModel.addUser(user)
-//
-//                                // Show success message
-//                                isRegistrationSuccessful = true
-//
-//                                // Navigate to login screen
-//                                navHostController?.navigate("login")
-//                            } catch (e: Exception) {
-//                                // Handle any potential errors
-//                                snackbarHostState.showSnackbar(
-//                                    message = "Registration failed: ${e.localizedMessage}",
-//                                    duration = SnackbarDuration.Short
-//                                )
-//                            }
-//                        }
 
                         viewModel.viewModelScope.launch(Dispatchers.IO) {
                             try {
